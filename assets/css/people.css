@@ -88,3 +88,7 @@ ul.network-icon {
     line-height: 1;
     text-rendering: auto;
 }
+
+.fa-house::before {
+    content: "\f015";
+}
