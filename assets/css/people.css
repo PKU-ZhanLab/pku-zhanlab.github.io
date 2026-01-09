@@ -1,0 +1,79 @@
+a {
+    color: #1565c0;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+a:hover {
+    color: #1565c0;
+    text-decoration: none;
+    transition: color .6s ease;
+}
+
+a:-webkit-any-link {
+    cursor: pointer;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px
+}
+
+.justify-content-center {
+    justify-content: center !important;
+}
+
+.people-widget {
+    font-size: .8rem;
+    text-align: center;
+    width: 20%;
+}
+
+
+.people-person {
+    position: relative;
+    padding-left: 15px;
+    padding-right: 15px;
+    box-sizing: border-box;
+    margin-bottom: 1rem !important;
+    flex: none;
+    max-width: 100%;
+    display: block;
+    unicode-bidi: isolate;
+    font-weight: 400;
+}
+
+.avatar-circle {
+    width: 80%;
+    max-width: 150px;
+    height: auto;
+    border-radius: 50%;
+    margin: 0 auto;
+    object-fit: cover;
+    box-sizing: border-box;
+}
+
+.img {
+    display: block;
+    vertical-align: middle;
+    border-style: none;
+    aspect-ratio: auto 270 / 270;
+}
+
+.portrait-title {
+    box-sizing: border-box;
+    display: block;
+    unicode-bidi: isolate;
+}
+
+ul.network-icon {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
