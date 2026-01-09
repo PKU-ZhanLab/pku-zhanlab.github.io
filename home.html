@@ -7,25 +7,27 @@
 
 <body>
 
+
 <section class="slideshow">
 
   <div class="slideshow-window">
-    <div class="slideshow-track" id="slideTrack">
-      <div class="slide"><img src="assets/carousel/fig1.jpg" alt=""></div>
-      <div class="slide"><img src="assets/carousel/fig2.jpg" alt=""></div>
-      <!-- <div class="slide"><img src="assets/carousel/fig3.jpg" alt=""></div> -->
+    <div class="slide active">
+      <img src="assets/carousel/fig1.jpg">
     </div>
+    <div class="slide">
+      <img src="assets/carousel/fig2.jpg">
+    </div>
+    <!-- <div class="slide">
+      <img src="assets/carousel/fig3.jpg">
+    </div> -->
 
-    <!-- 左右按钮 -->
-    <button class="slide-btn left" aria-label="Previous">&#10094;</button>
-    <button class="slide-btn right" aria-label="Next">&#10095;</button>
+    <button class="slide-btn left">&#10094;</button>
+    <button class="slide-btn right">&#10095;</button>
   </div>
 
-  <!-- 小圆点 -->
   <div class="slide-dots" id="slideDots"></div>
 
 </section>
-
 
 
 
@@ -60,58 +62,48 @@
 
 
 <script>
-  const track = document.getElementById("slideTrack");
   const slides = document.querySelectorAll(".slide");
   const dotsContainer = document.getElementById("slideDots");
-
   let index = 0;
-  let interval = null;
+  let timer = null;
 
-  /* 创建小圆点 */
   slides.forEach((_, i) => {
     const dot = document.createElement("span");
-    dot.onclick = () => goToSlide(i);
+    dot.onclick = () => goTo(i);
     dotsContainer.appendChild(dot);
   });
 
   const dots = dotsContainer.querySelectorAll("span");
 
-  function updateSlide() {
-    track.style.transform = `translateX(-${index * 100}%)`;
-    dots.forEach(dot => dot.classList.remove("active"));
+  function update() {
+    slides.forEach(s => s.classList.remove("active"));
+    dots.forEach(d => d.classList.remove("active"));
+    slides[index].classList.add("active");
     dots[index].classList.add("active");
   }
 
-  function goToSlide(i) {
+  function goTo(i) {
     index = (i + slides.length) % slides.length;
-    updateSlide();
-    restartAuto();
+    update();
+    restart();
   }
 
-  document.querySelector(".slide-btn.left").onclick = () => {
-    goToSlide(index - 1);
-  };
+  document.querySelector(".slide-btn.left").onclick = () => goTo(index - 1);
+  document.querySelector(".slide-btn.right").onclick = () => goTo(index + 1);
 
-  document.querySelector(".slide-btn.right").onclick = () => {
-    goToSlide(index + 1);
-  };
-
-  /* 自动播放 */
-  function startAuto() {
-    interval = setInterval(() => {
-      goToSlide(index + 1);
-    }, 5000); // 5 秒一张
+  function start() {
+    timer = setInterval(() => goTo(index + 1), 5000);
   }
 
-  function restartAuto() {
-    clearInterval(interval);
-    startAuto();
+  function restart() {
+    clearInterval(timer);
+    start();
   }
 
-  /* 初始化 */
-  updateSlide();
-  startAuto();
+  update();
+  start();
 </script>
+
 
 
 </body>
