@@ -11,7 +11,12 @@
 <body>
 
 <header class="site-header">
+  <div class="lab-info">
   <h1 class="lab-name">PKU Zhan Lab</h1>
+  </div>
+
+   <!-- 菜单按钮（默认隐藏） -->
+  <button class="menu-toggle" aria-label="Menu">&#9776;</button>
 
   <nav class="site-nav">
     <a href="home.html">Home</a>
@@ -30,6 +35,23 @@
 <footer class="site-footer">
   <p>© 2026 PKU Zhan Lab</p>
 </footer>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".site-nav");
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
+
+  document.querySelectorAll(".site-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+    });
+  });
+
+</script>
+
 
 </body>
 </html>
