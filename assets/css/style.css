@@ -42,12 +42,20 @@ a:hover {
   text-decoration: none;
 }
 
+.lab-info a:hover {
+  text-decoration: none;
+}
+
 .site-nav {
   color: #222;
 }
 
 .site-nav a {
   margin-right: 20px;
+  text-decoration: none;
+}
+
+.site-nav a:hover {
   text-decoration: none;
 }
 
@@ -78,13 +86,13 @@ a:hover {
   text-align: center;
 }
 
-.home-section {
+.home-section-style {
   padding: 40px 60px;
   max-width: 900px;
   margin: 0 auto;
 }
 
-.home-section h2 {
+.home-section-style h2 {
   font-weight: 500;
 }
 
