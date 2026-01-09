@@ -51,10 +51,51 @@ body {
 .home-section {
   padding: 40px 60px;
   max-width: 900px;
+  font-size: 26px;
 }
 
 .home-section h2 {
   font-weight: 500;
+}
+
+/* ===== 左右分栏 Section ===== */
+.split-section {
+  display: flex;
+  gap: 40px;
+  padding: 60px 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* 左侧标题 */
+.section-title {
+  flex: 0 0 220px;           /* ⭐ 固定左栏宽度 */
+  font-size: 26px;           /* ⭐ 放大 */
+  font-weight: 600;          /* ⭐ 加粗 */
+  line-height: 1.3;
+  text-transform: uppercase;
+  color: #222;
+}
+
+/* 右侧内容 */
+.section-content {
+  flex: 1;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* ===== 移动端自动变上下 ===== */
+@media (max-width: 768px) {
+  .split-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .section-title {
+    flex: none;
+    font-size: 22px;
+  }
 }
 
 
@@ -126,11 +167,6 @@ body {
 
 .slide-btn.right {
   right: 0;
-}
-
-
-.slide-btn:hover {
-  background: #f0f0f0;
 }
 
 .slideshow-window:hover .slide-btn {
