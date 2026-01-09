@@ -12,14 +12,14 @@
 
 <header class="site-header">
   <div class="lab-info">
-  <h1 class="lab-name">PKU Zhan Lab</h1>
+  <a class="lab-name" href="/" style="color: black;">PKU Zhan Lab</a>
   </div>
 
    <!-- 菜单按钮（默认隐藏） -->
   <button class="menu-toggle" aria-label="Menu">&#9776;</button>
 
   <nav class="site-nav">
-    <a href="home.html">Home</a>
+    <a href="/">Home</a>
     <a href="people.html">People</a>
     <a href="research.html">Research</a>
     <a href="publications.html">Publications</a>
@@ -28,13 +28,114 @@
 </header>
 
 <main class="site-content">
-  <!-- 默认加载 Home -->
-  <iframe src="home.html" class="content-frame"></iframe>
+  <section class="slideshow">
+
+  <div class="slideshow-window">
+    <div class="slide active">
+      <img src="assets/carousel/fig1.jpg">
+    </div>
+    <div class="slide">
+      <img src="assets/carousel/fig2.jpg">
+    </div>
+    <!-- <div class="slide">
+      <img src="assets/carousel/fig3.jpg">
+    </div> -->
+
+    <button class="slide-btn left">&#10094;</button>
+    <button class="slide-btn right">&#10095;</button>
+  </div>
+
+  <div class="slide-dots" id="slideDots"></div>
+
+</section>
+
+
+<section class="split-section">
+  <div class="section-title">
+    About<br>The Lab
+  </div>
+
+  <div class="section-content">
+    <p>
+      PKU Zhan Lab is a research laboratory affiliated with the 
+      <a href="https://www.psy.pku.edu.cn/index.htm" style="color: cornflowerblue;" target="_blank">School of Psychology and Cognitive Science</a>, 
+      Peking University (PKU).
+      Our projects focus on cognitive neuroscience and computational modeling.
+    </p>
+  </div>
+</section>
+
+
+<section class="home-section">
+  <div class="section-title">
+    Research Topics
+  </div>
+
+  <div class="section-content">
+    <li>Human category learning</li>
+    <li>Semantic effects on vision and memory</li>
+    <li>Cognitive reasoning in intuitive physics</li>
+    <li>Vision cognition</li>
+  </div>
+</section>
+
+<section class="home-section">
+  <div class="section-title">News</div>
+
+  <!-- <ul>
+    <li><strong>2025</strong> — Paper submitted to NeurIPS 2025</li>
+    <li><strong>2024</strong> — New PhD students joined the lab</li>
+  </ul> -->
+</section>
+
 </main>
 
 <footer class="site-footer">
   <p>© 2026 PKU Zhan Lab</p>
 </footer>
+
+<script>
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.getElementById("slideDots");
+  let index = 0;
+  let timer = null;
+
+  slides.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.onclick = () => goTo(i);
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = dotsContainer.querySelectorAll("span");
+
+  function update() {
+    slides.forEach(s => s.classList.remove("active"));
+    dots.forEach(d => d.classList.remove("active"));
+    slides[index].classList.add("active");
+    dots[index].classList.add("active");
+  }
+
+  function goTo(i) {
+    index = (i + slides.length) % slides.length;
+    update();
+    restart();
+  }
+
+  document.querySelector(".slide-btn.left").onclick = () => goTo(index - 1);
+  document.querySelector(".slide-btn.right").onclick = () => goTo(index + 1);
+
+  function start() {
+    timer = setInterval(() => goTo(index + 1), 5000);
+  }
+
+  function restart() {
+    clearInterval(timer);
+    start();
+  }
+
+  update();
+  start();
+</script>
 
 <script>
   const toggle = document.querySelector(".menu-toggle");

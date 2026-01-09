@@ -18,15 +18,19 @@ a:hover {
   display: flex;
   align-items: center;          /* ⭐ 垂直居中 */
   justify-content: space-between; /* ⭐ 左右分开 */
-  padding: 10px 10px 10px;
+  padding: 30px 30px 30px;
   border-bottom: 1px solid #ddd;
 }
 
-
 .lab-name {
   margin: 0;
-  font-size: 32px;
-  font-weight: 500;
+  font-size: 30px;
+  font-weight: 600;
+}
+
+.lab-name a {
+  margin-right: 20px;
+  text-decoration: none;
 }
 
 .lab-info {
@@ -42,10 +46,6 @@ a:hover {
 .site-nav a {
   margin-right: 20px;
   text-decoration: none;
-}
-
-.site-nav a:hover {
-  text-decoration: underline;
 }
 
 .site-content {
