@@ -174,12 +174,6 @@ ul.network-icon {
     content: "\f015";
 }
 
-@media(min-width: 992px) {
-    .people-widget .col-sm-auto {
-        width:20%
-    }
-}
-
 @media(min-width: 576px) {
     .people-widget .col-sm-auto {
         width:30%
@@ -190,6 +184,14 @@ ul.network-icon {
         max-width: 100%;
     }
 }
+
+@media(min-width: 992px) {
+    .people-widget .col-sm-auto {
+        width:20%
+    }
+}
+
+
 
 :host,:root {
     --fa-style-family-classic: "Font Awesome 6 Free";
