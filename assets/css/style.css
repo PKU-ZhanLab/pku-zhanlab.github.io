@@ -22,7 +22,7 @@ a:hover {
   display: flex;
   align-items: center;          /* ⭐ 垂直居中 */
   justify-content: space-between; /* ⭐ 左右分开 */
-  padding: 30px 30px 30px;
+  padding: 10px 50px 10px 50px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -115,6 +115,7 @@ a:hover {
   line-height: 1.3;
   color: #222;
   text-align: center;
+  margin: 0 0 20px;
 }
 
 /* 右侧内容 */
