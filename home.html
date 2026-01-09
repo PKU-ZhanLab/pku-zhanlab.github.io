@@ -7,34 +7,111 @@
 
 <body>
 
+<section class="slideshow">
+
+  <div class="slideshow-window">
+    <div class="slideshow-track" id="slideTrack">
+      <div class="slide"><img src="assets/carousel/fig1.jpg" alt=""></div>
+      <div class="slide"><img src="assets/carousel/fig2.jpg" alt=""></div>
+      <!-- <div class="slide"><img src="assets/carousel/fig3.jpg" alt=""></div> -->
+    </div>
+
+    <!-- 左右按钮 -->
+    <button class="slide-btn left" aria-label="Previous">&#10094;</button>
+    <button class="slide-btn right" aria-label="Next">&#10095;</button>
+  </div>
+
+  <!-- 小圆点 -->
+  <div class="slide-dots" id="slideDots"></div>
+
+</section>
+
+
+
+
 <section class="home-section">
   <h2>About the Lab</h2>
 
   <p>
-    PKU Zhan Lab is a research group in the <a href="https://www.psy.pku.edu.cn/index.htm" style="color: cornflowerblue;">School of Psychology and Cognitive Science</a>, Peking University (PKU).
-    Our work focuses on cognitive neuroscience and computational modeling.
+    PKU Zhan Lab is a research laboratory affiliated with the <a href="https://www.psy.pku.edu.cn/index.htm" style="color: cornflowerblue;" target="_blank">School of Psychology and Cognitive Science</a>, Peking University (PKU).
+    Our projects focus on cognitive neuroscience and computational modeling.
   </p>
 </section>
 
 <section class="home-section">
-  <h2>Research Themes</h2>
+  <h2>Research Topics</h2>
 
   <ul>
-    <li>Human category learning and decision-making</li>
-    <li>Bayesian and resource-rational modeling</li>
-    <li>Neural representations of vision and memory</li>
-    <li>Integration of behavioral and neuroimaging data</li>
+    <li>Human category learning</li>
+    <li>Semantic effects on vision and memory</li>
+    <li>Cognitive reasoning in intuitive physics</li>
+    <li>Vision cognition</li>
   </ul>
 </section>
 
 <section class="home-section">
-  <h2>Recent Updates</h2>
+  <h2>News</h2>
 
   <!-- <ul>
-    <li><strong>2025</strong> — Paper accepted at NeurIPS</li>
+    <li><strong>2025</strong> — Paper submitted to NeurIPS 2025</li>
     <li><strong>2024</strong> — New PhD students joined the lab</li>
   </ul> -->
 </section>
+
+
+<script>
+  const track = document.getElementById("slideTrack");
+  const slides = document.querySelectorAll(".slide");
+  const dotsContainer = document.getElementById("slideDots");
+
+  let index = 0;
+  let interval = null;
+
+  /* 创建小圆点 */
+  slides.forEach((_, i) => {
+    const dot = document.createElement("span");
+    dot.onclick = () => goToSlide(i);
+    dotsContainer.appendChild(dot);
+  });
+
+  const dots = dotsContainer.querySelectorAll("span");
+
+  function updateSlide() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.forEach(dot => dot.classList.remove("active"));
+    dots[index].classList.add("active");
+  }
+
+  function goToSlide(i) {
+    index = (i + slides.length) % slides.length;
+    updateSlide();
+    restartAuto();
+  }
+
+  document.querySelector(".slide-btn.left").onclick = () => {
+    goToSlide(index - 1);
+  };
+
+  document.querySelector(".slide-btn.right").onclick = () => {
+    goToSlide(index + 1);
+  };
+
+  /* 自动播放 */
+  function startAuto() {
+    interval = setInterval(() => {
+      goToSlide(index + 1);
+    }, 5000); // 5 秒一张
+  }
+
+  function restartAuto() {
+    clearInterval(interval);
+    startAuto();
+  }
+
+  /* 初始化 */
+  updateSlide();
+  startAuto();
+</script>
 
 
 </body>
