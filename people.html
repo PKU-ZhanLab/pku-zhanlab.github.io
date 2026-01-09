@@ -61,5 +61,22 @@
 <script src="assets/js/wowchemy.min.7f5ebaff62ae468cff8bb3dd1337bb9b.js"></script>
 <script src="assets/js/wowchemy-map.a26e9d2f7238ba5b868384f1c5bc6477.js" type="module"></script>
 <script src="assets/js/wowchemy-publication.9c0e895144aef5a693008b5c5d450147.js" type="module"></script>
+
+<script>
+  const toggle = document.querySelector(".menu-toggle");
+  const nav = document.querySelector(".site-nav");
+
+  toggle.addEventListener("click", () => {
+    nav.classList.toggle("open");
+  });
+
+  document.querySelectorAll(".site-nav a").forEach(link => {
+    link.addEventListener("click", () => {
+      nav.classList.remove("open");
+    });
+  });
+
+</script>
+
 </body>
 </html>

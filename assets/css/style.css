@@ -171,7 +171,7 @@ a:hover {
 .slideshow {
   width: 100%;
   max-width: 1100px;
-  margin: 40px auto;
+  margin: 0 auto;
   padding: 0 20px;
   box-sizing: border-box;
 }
@@ -245,7 +245,6 @@ a:hover {
 /* ===== 小圆点 ===== */
 .slide-dots {
   text-align: center;
-  margin-top: 12px;
 }
 
 .slide-dots span {
