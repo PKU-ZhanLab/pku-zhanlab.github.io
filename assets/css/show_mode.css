@@ -102,11 +102,11 @@ h3 {
 }
 
 .people-widget .portrait-title h2 {
-    font-size: 1rem;
+    font-size: 1.3rem;
 }
 
 .people-widget .portrait-title h3 {
-    font-size: .7rem;
+    font-size: .9rem;
 }
 
 .avatar {
@@ -172,6 +172,23 @@ ul.network-icon {
 
 .fa-house:before {
     content: "\f015";
+}
+
+@media(min-width: 992px) {
+    .people-widget .col-sm-auto {
+        width:20%
+    }
+}
+
+@media(min-width: 576px) {
+    .people-widget .col-sm-auto {
+        width:30%
+    }
+    .col-sm-auto {
+        flex: none;
+        width: auto;
+        max-width: 100%;
+    }
 }
 
 :host,:root {
