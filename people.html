@@ -1,8 +1,24 @@
+<!--
+  PKU Zhan Lab - People Page
+  
+  此文件用于展示实验室成员信息
+  
+  添加新成员的步骤：
+  1. 确定要添加到哪个分类（Student/Collaborator等）
+  2. 复制一个完整的 <div class="col-12 col-sm-auto people-person mb-3"> 块
+  3. 修改其中的姓名、职位、链接等信息
+  4. 确保图片路径正确（格式：/members/姓名-首字母/文件名）
+  5. 修改邮箱、Google Scholar、GitHub、个人主页链接
+  
+  分类标签位置：
+  - <div class="col-md-12"><h2 class="mb-4">Student</h2></div> - 学生
+  - <div class="col-md-12"><h2 class="mb-4">Collaborator</h2></div> - 合作者
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>PKU Zhan Lab</title>
+  <title>PKU Zhan Lab - People</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="/assets/css/style.css">
@@ -39,14 +55,20 @@
     <div class="home-section-bg"></div>
     <div class="container">
       <div class="row justify-content-center people-widget">
+        <!-- ========== PI / 实验室负责人 ========== -->
         <div class="col-12 col-sm-auto people-person mb-3">
+          <!-- 头像链接和个人主页链接（点击头像跳转） -->
           <a href="https://www.psy.pku.edu.cn/szdw/qzjy/jsyjy/zhjy/index.htm" target="_blank" rel="noopener">
             <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/jiayu-zhan/jiayuzhan.png" alt="Avatar">
           </a>
           <div class="portrait-title">
+            <!-- 姓名链接（点击姓名跳转） -->
             <h2><a href="https://www.psy.pku.edu.cn/szdw/qzjy/jsyjy/zhjy/index.htm" target="_blank" rel="noopener">Jiayu Zhan</a></h2>
+            <!-- 单位 -->
             <h3>Peking University</h3>
+            <!-- 职位 -->
             <h3>Assistant Professor</h3>
+            <!-- 社交媒体链接 -->
             <ul class="network-icon" aria-hidden="true">
               <li><a href="mailto:jiayu.zhan@pku.edu.cn"><i class="fas fa-envelope"></i></a></li>
               <li><a href="https://scholar.google.com/citations?user=8dCtFiIAAAAJ&hl=en" target="_blank" rel="noopener"><i class="ai ai-google-scholar"></i></a></li>
@@ -54,7 +76,9 @@
             </ul>
           </div>
         </div>
+        <!-- ========== 分类标题：学生 ========== -->
         <div class="col-md-12"><h2 class="mb-4">Student</h2></div>
+        <!-- 学生 1: Zigui Zhu -->
         <div class="col-12 col-sm-auto people-person mb-3">
           <a href="https://github.com/zhuleslie" target="_blank" rel="noopener">
             <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/zigui-zhu/ziguizhu.png" alt="Avatar">
@@ -71,6 +95,7 @@
             </ul>
           </div>
         </div>
+        <!-- 学生 2: Zitong Li -->
         <div class="col-12 col-sm-auto people-person mb-3">
           <a href="https://github.com/Zitong-Li-1003" target="_blank" rel="noopener">
             <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/zitong-li/zitongli.png" alt="Avatar">
@@ -87,6 +112,7 @@
             </ul>
           </div>
         </div>
+        <!-- 学生 3: Xingping Yu -->
         <div class="col-12 col-sm-auto people-person mb-3">
           <a href="https://xingpingyu.github.io" target="_blank" rel="noopener">
             <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/xingping-yu/xingpingyu.png" alt="Avatar">
@@ -103,7 +129,26 @@
             </ul>
           </div>
         </div>
+        <!-- 学生 4: Yinuo Yang -->
+        <div class="col-12 col-sm-auto people-person mb-3">
+          <a href="https://github.com/YangNorman" target="_blank" rel="noopener">
+            <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/yinuo-yang/yinuoyang.jpg" alt="Avatar">
+          </a>
+          <div class="portrait-title">
+            <h2><a href="https://github.com/YangNorman" target="_blank" rel="noopener">Yinuo Yang</a></h2>
+            <h3>PKU School of Psychological and Cognitive Sciences</h3>
+            <h3>Ph.D. '24</h3>
+            <ul class="network-icon" aria-hidden="true">
+              <li><a href="mailto:mrgnorman@163.com"><i class="fas fa-envelope"></i></a></li>
+              <li><a href="https://scholar.google.com/citations?user=6AErr0UAAAAJ&hl=en" target="_blank" rel="noopener"><i class="ai ai-google-scholar"></i></a></li>
+              <li><a href="https://github.com/YangNorman" target="_blank" rel="noopener"><i class="fab fa-github"></i></a></li>
+              <!-- <li><a href="" target="_blank" rel="noopener"><i class="fas fa-house"></i></a></li> -->
+            </ul>
+          </div>
+        </div>
+        <!-- ========== 分类标题：合作者 ========== -->
         <div class="col-md-12"><h2 class="mb-4">Collaborator</h2></div>
+        <!-- 合作者 1: Junqi Wang -->
         <div class="col-12 col-sm-auto people-person mb-3">
           <a href="https://github.com/JestonDeAnda" target="_blank" rel="noopener">
             <img width="270" height="270" loading="lazy" class="avatar avatar-circle" src="/members/junqi-wang/junqiwang.png" alt="Avatar">
