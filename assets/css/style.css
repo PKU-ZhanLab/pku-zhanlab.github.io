@@ -125,6 +125,60 @@ a:hover {
   color: #333;
 }
 
+.section-content p {
+  margin: 0 0 18px;
+}
+
+.lead-text {
+  font-size: 30px;
+  line-height: 1.45;
+  font-weight: 500;
+  color: #111;
+}
+
+.research-overview {
+  display: flex;
+  gap: 70px;
+  padding: 20px 60px 70px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.research-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.research-card {
+  border-top: 2px solid #222;
+  padding: 18px 2px 0;
+}
+
+.research-index {
+  margin-bottom: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #777;
+}
+
+.research-card h3 {
+  min-height: 76px;
+  margin: 0 0 14px;
+  font-size: 21px;
+  line-height: 1.22;
+  font-weight: 600;
+  color: #111;
+}
+
+.research-card p {
+  margin: 0;
+  color: #444;
+}
+
 /* ===== 移动端自动变上下 ===== */
 @media (max-width: 768px) {
   .site-header {
@@ -157,11 +211,39 @@ a:hover {
   .split-section {
     flex-direction: column;
     gap: 20px;
+    padding: 44px 24px;
   }
 
   .section-title {
     flex: none;
-    font-size: 40px;
+    font-size: 34px;
+    text-align: left;
+  }
+
+  .section-content {
+    font-size: 19px;
+    line-height: 1.65;
+  }
+
+  .lead-text {
+    font-size: 24px;
+  }
+
+  .research-overview {
+    flex-direction: column;
+    gap: 20px;
+    padding: 12px 24px 54px;
+  }
+
+  .research-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+    font-size: 16px;
+  }
+
+  .research-card h3 {
+    min-height: 0;
+    font-size: 21px;
   }
 }
 
