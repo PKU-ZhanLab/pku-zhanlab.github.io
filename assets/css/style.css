@@ -341,3 +341,15 @@ a:hover {
 .slide-dots span.active {
   background: #333;
 }
+
+/* Keep names aligned in the people grid even when source portraits have different aspect ratios. */
+.people-widget .avatar {
+  width: 150px !important;
+  height: 150px !important;
+  object-fit: cover;
+  display: block;
+}
+
+.people-widget .portrait-title h2 {
+  margin-top: 20px;
+}
