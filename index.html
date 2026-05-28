@@ -5,113 +5,313 @@
   <title>PKU Zhan Lab</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="preconnect" href="https://unpkg.com">
   <link rel="stylesheet" href="/assets/css/wowchemy.37c3129fa572f6de5ff709e6da9888d2.css">
   <link rel="stylesheet" href="/assets/css/vendor-bundle.min.26c458e6907dc03073573976b7f4044e.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/style.css?v=20260527-home10">
 </head>
 
-<body>
+<body class="home-page">
 
-<header class="site-header">
+<div class="scroll-progress" aria-hidden="true"></div>
+<div class="cursor-glow" aria-hidden="true"></div>
+<nav class="page-rail" aria-label="Homepage sections">
+  <a href="#hero" class="is-active"><span>Intro</span></a>
+  <a href="#about"><span>About</span></a>
+  <a href="#questions"><span>Questions</span></a>
+  <a href="#research"><span>Research</span></a>
+  <a href="#work"><span>Work</span></a>
+</nav>
+
+<header class="site-header home-header">
   <div class="lab-info">
-  <a class="lab-name" href="/" style="color: black;">PKU Zhan Lab</a>
+    <a class="lab-name" href="/" style="color: black;">PKU Zhan Lab</a>
   </div>
 
-   <!-- 菜单按钮（默认隐藏） -->
   <button class="menu-toggle" aria-label="Menu">&#9776;</button>
 
   <nav class="site-nav">
-    <a href="/" style="color: #333;">Home</a>
+    <a href="/" class="is-active" style="color: #333;">Home</a>
     <a href="people.html" style="color: #333;">People</a>
     <a href="research.html" style="color: #333;">Research</a>
     <a href="publications.html" style="color: #333;">Publications</a>
-    <!-- <a href="join.html">Contact Us</a> -->
   </nav>
 </header>
 
 <main class="site-content">
-  <section class="slideshow">
+  <section id="hero" class="lab-hero" aria-label="PKU Zhan Lab overview">
+    <canvas id="brain-canvas" aria-hidden="true"></canvas>
+    <div class="hero-beam" aria-hidden="true"></div>
+    <div class="hero-particle-field" aria-hidden="true"></div>
 
-  <div class="slideshow-window">
-    <div class="slide active">
-      <img src="/assets/carousel/fig2.jpg" loading="lazy">
+    <div class="hero-shell">
+      <div class="hero-copy">
+        <p class="hero-kicker">Cognition · Brain · Artificial Intelligence</p>
+        <h1>Understanding intelligence from neural dynamics to autonomous agents.</h1>
+        <p class="hero-lede">
+          PKU Zhan Lab studies how minds and brains form efficient understanding, value-guided decisions, and adaptive action from limited information.
+        </p>
+        <div class="hero-actions">
+          <a class="button-primary" href="research.html">Explore Research</a>
+          <a class="button-secondary" href="people.html">Meet the Team</a>
+        </div>
+        <div class="hero-labline" aria-label="Lab focus areas">
+          <span>Perception</span>
+          <span>Neural computation</span>
+          <span>Value-aligned agency</span>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Research profile">
+        <div class="panel-orbit" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="signal-row">
+          <span>Neural decoding</span>
+          <strong>ms-scale</strong>
+        </div>
+        <div class="signal-row">
+          <span>Behavioral modeling</span>
+          <strong>human-centered</strong>
+        </div>
+        <div class="signal-row">
+          <span>AI alignment</span>
+          <strong>value-guided</strong>
+        </div>
+      </aside>
     </div>
-    <div class="slide">
-      <img src="/assets/carousel/fig1.jpg" loading="lazy">
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <span></span>
     </div>
-    <!-- <div class="slide">
-      <img src="assets/carousel/fig3.jpg">
-    </div> -->
+  </section>
 
-    <button class="slide-btn left">&#10094;</button>
-    <button class="slide-btn right">&#10095;</button>
-  </div>
-
-  <div class="slide-dots" id="slideDots"></div>
-
-</section>
-
-
-<section class="split-section">
-  <div class="section-title">
-    About<br>The Lab
-  </div>
-
-  <div class="section-content">
-    <p class="lead-text">
-      PKU Zhan Lab studies how the human mind and brain build efficient understanding and action from limited information.
-    </p>
-    <p>
-      Based at the 
-      <a href="https://www.psy.pku.edu.cn/index.htm" style="color: cornflowerblue;" target="_blank">School of Psychological and Cognitive Sciences</a>, 
-      Peking University, our group brings together cognitive science, neuroscience, artificial intelligence, data science, and social-behavioral research. We combine behavioral experiments, neural measurements, computational modeling, and AI systems to investigate perception, reasoning, value-guided decision making, and intelligent behavior.
-    </p>
-  </div>
-</section>
-
-
-<section class="research-overview">
-  <div class="section-title">
-    Research<br>Directions
-  </div>
-
-  <div class="section-content research-grid">
-    <article class="research-card">
-      <div class="research-index">01</div>
-      <h3>Visual Cognition and Reasoning</h3>
+  <section id="about" class="lab-intro section-band">
+    <div class="section-heading">
+      <span class="eyebrow">About the lab</span>
+      <h2>We connect cognitive science, neuroscience, and AI to explain intelligent behavior.</h2>
+    </div>
+    <div class="intro-body">
       <p>
-        We study how people interpret objects, agents, scenes, emotions, physical events, and social signals, and how these representations support judgment, learning, and action in complex environments.
+        Based at the <a href="https://www.psy.pku.edu.cn/index.htm" target="_blank" rel="noopener">School of Psychological and Cognitive Sciences</a>, Peking University, our group brings together psychology, cognitive neuroscience, computational neuroscience, data science, artificial intelligence, and social-behavioral research.
       </p>
-    </article>
-
-    <article class="research-card">
-      <div class="research-index">02</div>
-      <h3>Neural Decoding and Interpretable Brain Algorithms</h3>
       <p>
-        We develop high-resolution approaches for tracking information processing in the human brain, linking neural dynamics to behavior and translating effective brain computations into interpretable algorithmic principles.
+        We combine behavioral experiments, neural measurements, computational modeling, and AI systems to study perception, reasoning, value decision-making, and interactive intelligence. Our goal is to develop explanatory models of the human mind and translate effective brain computations into interpretable, human-compatible algorithms.
       </p>
-    </article>
+    </div>
+  </section>
 
-    <article class="research-card">
-      <div class="research-index">03</div>
-      <h3>Human-like Autonomous AI Agents</h3>
-      <p>
-        We build value-guided agents that connect perception, evidence seeking, social meaning, and goal planning, with the long-term aim of creating AI systems that interact more naturally with human users.
-      </p>
-    </article>
-  </div>
-</section>
+  <section class="pipeline-section section-band" aria-label="Research pipeline">
+    <div class="pipeline-track">
+      <div class="pipeline-node">
+        <span>01</span>
+        <strong>Behavior</strong>
+        <p>Measure cognition in structured and naturalistic tasks.</p>
+      </div>
+      <div class="pipeline-node">
+        <span>02</span>
+        <strong>Brain Signals</strong>
+        <p>Decode dynamic neural representations across time and scale.</p>
+      </div>
+      <div class="pipeline-node">
+        <span>03</span>
+        <strong>Computational Models</strong>
+        <p>Build interpretable accounts of perception, value, and action.</p>
+      </div>
+      <div class="pipeline-node">
+        <span>04</span>
+        <strong>Autonomous Systems</strong>
+        <p>Translate mechanisms into human-compatible AI agents.</p>
+      </div>
+    </div>
+  </section>
 
-<section class="home-section-style">
-  <div class="section-title">News</div>
+  <section id="questions" class="questions-section section-band">
+    <div class="questions-heading">
+      <span class="eyebrow">Frontier questions</span>
+      <h2>How perception becomes meaning, how meaning becomes value, and how value becomes action.</h2>
+    </div>
+    <div class="question-list">
+      <div class="question-item">
+        <span>Perception</span>
+        <p>How do humans infer structure, intention, and emotion from incomplete sensory evidence?</p>
+      </div>
+      <div class="question-item">
+        <span>Computation</span>
+        <p>Which neural mechanisms can be transformed into stable and interpretable algorithms?</p>
+      </div>
+      <div class="question-item">
+        <span>Agency</span>
+        <p>How can artificial agents plan with human values, uncertainty, and social context in the loop?</p>
+      </div>
+    </div>
+  </section>
 
-  <!-- <ul>
-    <li><strong>2025</strong> — Paper submitted to NeurIPS 2025</li>
-    <li><strong>2024</strong> — New PhD students joined the lab</li>
-  </ul> -->
-</section>
+  <section class="lens-section section-band" aria-label="Research lens">
+    <div class="lens-copy">
+      <span class="eyebrow">Research lens</span>
+      <h2>Switch perspectives on the same intelligence problem.</h2>
+    </div>
+    <div class="lens-console">
+      <div class="lens-controls" role="tablist" aria-label="Research lens selector">
+        <button class="is-active" type="button" data-lens="perception" role="tab" aria-selected="true">Perception</button>
+        <button type="button" data-lens="brain" role="tab" aria-selected="false">Brain Dynamics</button>
+        <button type="button" data-lens="agents" role="tab" aria-selected="false">Agents</button>
+      </div>
+      <div class="lens-display" aria-live="polite">
+        <div class="lens-visual" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <p class="lens-label">Active lens</p>
+        <h3 id="lens-title">Perception as structured inference</h3>
+        <p id="lens-text">We model how humans recover objects, scenes, social signals, and hidden causes from sparse sensory evidence.</p>
+      </div>
+    </div>
+  </section>
 
+  <section id="research" class="direction-section section-band">
+    <div class="section-heading compact">
+      <span class="eyebrow">Research directions</span>
+      <h2>Three linked programs, one question: how intelligence becomes useful action.</h2>
+    </div>
+
+    <div class="direction-grid">
+      <article class="direction-card">
+        <span class="card-index">01</span>
+        <h3>Visual Cognition and Reasoning</h3>
+        <p>
+          We investigate how people interpret objects, agents, scenes, emotions, physical events, and social signals, and how these representations support judgment, learning, and action.
+        </p>
+      </article>
+
+      <article class="direction-card">
+        <span class="card-index">02</span>
+        <h3>Neural Decoding and Interpretable Brain Algorithms</h3>
+        <p>
+          We track information processing in the human brain with high temporal precision, link neural dynamics to behavior, and extract algorithmic principles that remain interpretable.
+        </p>
+      </article>
+
+      <article class="direction-card">
+        <span class="card-index">03</span>
+        <h3>Human-like Autonomous AI Agents</h3>
+        <p>
+          We build value-guided agents that connect perception, evidence seeking, social meaning, and goal planning for more natural, personalized, and long-horizon interaction.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <section class="principles-section section-band">
+    <div class="principle-item">
+      <span>Principle 01</span>
+      <p>Start with human behavior, then ask what computations could produce it.</p>
+    </div>
+    <div class="principle-item">
+      <span>Principle 02</span>
+      <p>Use neural data to constrain models, not merely decorate them.</p>
+    </div>
+    <div class="principle-item">
+      <span>Principle 03</span>
+      <p>Translate mechanisms into AI systems that remain interpretable and human-compatible.</p>
+    </div>
+  </section>
+
+  <section class="methods-section section-band">
+    <div class="methods-copy">
+      <span class="eyebrow">Technical approach</span>
+      <h2>From human data to models that can be tested, interpreted, and deployed.</h2>
+    </div>
+    <div class="method-stack">
+      <div class="method-item">
+        <span>01</span>
+        <p>Behavioral experiments and computational task design for complex cognition.</p>
+      </div>
+      <div class="method-item">
+        <span>02</span>
+        <p>MEG, neuroimaging, and model-based neural decoding at fine temporal scales.</p>
+      </div>
+      <div class="method-item">
+        <span>03</span>
+        <p>Brain-AI alignment, representation discovery, and intervention in neural networks.</p>
+      </div>
+      <div class="method-item">
+        <span>04</span>
+        <p>Closed-loop systems for brain-computer interfaces, intelligent feedback, and human-AI collaboration.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="translation-section" aria-label="Research translation areas">
+    <div class="translation-label">Translation areas</div>
+    <div class="translation-marquee">
+      <div class="translation-track">
+        <span>Brain-computer interfaces</span>
+        <span>Cognitive state assessment</span>
+        <span>Neurofeedback</span>
+        <span>Human-AI collaboration</span>
+        <span>Personalized training</span>
+        <span>Intelligent interaction</span>
+        <span>Brain-inspired algorithms</span>
+        <span>Value-aligned agents</span>
+        <span>Brain-computer interfaces</span>
+        <span>Cognitive state assessment</span>
+        <span>Neurofeedback</span>
+        <span>Human-AI collaboration</span>
+        <span>Personalized training</span>
+        <span>Intelligent interaction</span>
+        <span>Brain-inspired algorithms</span>
+        <span>Value-aligned agents</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" class="work-section section-band">
+    <div class="section-heading compact">
+      <span class="eyebrow">Selected work</span>
+      <h2>Recent projects span value-guided agents, human reasoning, and neural computation.</h2>
+    </div>
+
+    <div class="work-grid">
+      <a class="work-card" href="publications.html">
+        <img src="/papers/nips2025/valuepilot.png" alt="ValuePilot project preview" loading="eager">
+        <div>
+          <span>Autonomous AI Agents</span>
+          <h3>Value-guided planning and evidence seeking</h3>
+        </div>
+      </a>
+      <a class="work-card" href="publications.html">
+        <img src="/papers/key_publications/modelling21.png" alt="Computational modeling project preview" loading="eager">
+        <div>
+          <span>Cognitive Modeling</span>
+          <h3>Computational accounts of human learning and decision</h3>
+        </div>
+      </a>
+      <a class="work-card" href="publications.html">
+        <img src="/papers/key_publications/dynamic19.png" alt="Dynamic neural processing project preview" loading="eager">
+        <div>
+          <span>Neural Dynamics</span>
+          <h3>Tracking brain representations as cognition unfolds</h3>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section class="home-cta" aria-label="Explore PKU Zhan Lab">
+    <div>
+      <span class="eyebrow">Explore further</span>
+      <h2>Follow the people, papers, and systems behind the lab.</h2>
+    </div>
+    <div class="home-cta-actions">
+      <a class="button-primary" href="publications.html">View Publications</a>
+      <a class="button-secondary" href="people.html">People</a>
+    </div>
+  </section>
 </main>
 
 <footer class="site-footer">
@@ -119,57 +319,15 @@
   <p class="powered-by footer-license-icons" style="font-size: .75rem; display: block;">
     Creative Commons License
     <a href="https://creativecommons.org/licenses/by-nc-nd/4.0" rel="noopener noreferrer" target="_blank" aria-label="Creative Commons">
-          <i class="fab fa-creative-commons fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
-          <i class="fab fa-creative-commons-by fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
-          <i class="fab fa-creative-commons-nc fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
-          <i class="fab fa-creative-commons-nd fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
+      <i class="fab fa-creative-commons fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
+      <i class="fab fa-creative-commons-by fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
+      <i class="fab fa-creative-commons-nc fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
+      <i class="fab fa-creative-commons-nd fa-2x" style="font-size: 1em; height: auto; margin-right: 0;" aria-hidden="true"></i>
     </a>
   </p>
 </footer>
 
-<script>
-  const slides = document.querySelectorAll(".slide");
-  const dotsContainer = document.getElementById("slideDots");
-  let index = 0;
-  let timer = null;
-
-  slides.forEach((_, i) => {
-    const dot = document.createElement("span");
-    dot.onclick = () => goTo(i);
-    dotsContainer.appendChild(dot);
-  });
-
-  const dots = dotsContainer.querySelectorAll("span");
-
-  function update() {
-    slides.forEach(s => s.classList.remove("active"));
-    dots.forEach(d => d.classList.remove("active"));
-    slides[index].classList.add("active");
-    dots[index].classList.add("active");
-  }
-
-  function goTo(i) {
-    index = (i + slides.length) % slides.length;
-    update();
-    restart();
-  }
-
-  document.querySelector(".slide-btn.left").onclick = () => goTo(index - 1);
-  document.querySelector(".slide-btn.right").onclick = () => goTo(index + 1);
-
-  function start() {
-    timer = setInterval(() => goTo(index + 1), 5000);
-  }
-
-  function restart() {
-    clearInterval(timer);
-    start();
-  }
-
-  update();
-  start();
-</script>
-
+<script type="module" src="/assets/js/home-brain.js?v=20260527-9"></script>
 <script>
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.querySelector(".site-nav");
@@ -183,9 +341,7 @@
       nav.classList.remove("open");
     });
   });
-
 </script>
-
 
 </body>
 </html>
