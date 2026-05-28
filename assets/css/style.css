@@ -2554,3 +2554,20 @@ a:hover {
     padding: 30px 34px;
   }
 }
+
+.methods-section.section-band {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: none;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: max(56px, calc((100vw - 1600px) / 2 + 56px));
+  padding-right: max(56px, calc((100vw - 1600px) / 2 + 56px));
+}
+
+@media (max-width: 900px) {
+  .methods-section.section-band {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
