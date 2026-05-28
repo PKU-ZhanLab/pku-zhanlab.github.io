@@ -2426,7 +2426,103 @@ a:hover {
   content: none;
 }
 
+.team-photo-screen {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(300px, 0.36fr) minmax(0, 0.64fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: end;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 30px clamp(36px, 3.5vw, 56px) 90px;
+}
+
+.team-photo-copy {
+  max-width: 430px;
+  padding-bottom: 28px;
+}
+
+.team-photo-copy h2 {
+  margin: 0;
+  color: #111;
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: 720;
+  line-height: 1.08;
+}
+
+.team-photo-stage {
+  position: relative;
+  min-height: clamp(520px, 50vw, 720px);
+}
+
+.team-photo-main,
+.team-photo-inset {
+  margin: 0;
+  overflow: hidden;
+  background: #e9e6dc;
+  box-shadow: 0 30px 90px rgba(20, 20, 20, 0.13);
+}
+
+.team-photo-main {
+  position: absolute;
+  inset: 0 0 72px 0;
+  border-radius: 8px;
+}
+
+.team-photo-inset {
+  position: absolute;
+  right: 7%;
+  bottom: 0;
+  width: min(44%, 420px);
+  aspect-ratio: 4 / 3;
+  border: 8px solid #f7f7f2;
+  border-radius: 8px;
+}
+
+.team-photo-main img,
+.team-photo-inset img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.team-photo-main img {
+  object-position: center 44%;
+}
+
+.team-photo-inset img {
+  object-position: center 48%;
+}
+
 @media (max-width: 900px) {
+  .team-photo-screen {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 10px 24px 58px;
+  }
+
+  .team-photo-copy {
+    max-width: none;
+    padding-bottom: 0;
+  }
+
+  .team-photo-stage {
+    min-height: 500px;
+  }
+
+  .team-photo-main {
+    inset: 0 0 150px 0;
+  }
+
+  .team-photo-inset {
+    left: 22px;
+    right: auto;
+    bottom: 0;
+    width: min(76%, 300px);
+    border-width: 6px;
+  }
+
   .people-page #section-people {
     padding: 14px 0 82px;
   }
