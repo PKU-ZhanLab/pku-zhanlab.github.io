@@ -274,23 +274,26 @@ function createFiringEvent(originIndex, points, adjacency, root, firingEvents) {
   if (!schedule.edges.length) return;
   schedule.points = points;
 
-  const nodeGeometry = new THREE.BufferGeometry();
-  const nodeMaterial = new THREE.PointsMaterial({
-    color: 0xba232a,
-    transparent: true,
-    opacity: 0.92,
-    size: 0.095,
-    sizeAttenuation: true,
-    depthWrite: false
+  const nodeGeometry = new THREE.SphereGeometry(1, 14, 8);
+  const nodePulses = schedule.nodes.map(({ index }) => {
+    const material = new THREE.MeshBasicMaterial({
+      color: 0xba232a,
+      transparent: true,
+      opacity: 0,
+      depthWrite: false
+    });
+    const pulse = new THREE.Mesh(nodeGeometry, material);
+    pulse.position.copy(points[index]);
+    pulse.scale.setScalar(0.01);
+    root.add(pulse);
+    return pulse;
   });
-  const nodeCloud = new THREE.Points(nodeGeometry, nodeMaterial);
-  root.add(nodeCloud);
 
   const lineGeometry = new THREE.BufferGeometry();
   const lineMaterial = new THREE.LineBasicMaterial({
     color: 0xba232a,
     transparent: true,
-    opacity: 0.82,
+    opacity: 0.74,
     depthWrite: false
   });
   const line = new THREE.LineSegments(lineGeometry, lineMaterial);
@@ -299,9 +302,8 @@ function createFiringEvent(originIndex, points, adjacency, root, firingEvents) {
   firingEvents.push({
     age: 0,
     schedule,
-    nodeCloud,
+    nodePulses,
     nodeGeometry,
-    nodeMaterial,
     line,
     lineGeometry,
     lineMaterial
@@ -312,35 +314,49 @@ function updateFiringEvents(firingEvents) {
   for (let i = firingEvents.length - 1; i >= 0; i -= 1) {
     const event = firingEvents[i];
     event.age += 0.018;
-    const fade = THREE.MathUtils.clamp((event.schedule.duration - event.age) / 0.42, 0, 1);
-    const visibleNodes = [];
     const visibleLines = [];
+    const nodeLifetime = 0.46;
+    const attack = 0.075;
+    const travelTime = 0.18;
+    const tailDelay = 0.075;
 
-    event.schedule.nodes.forEach(({ index, start }) => {
-      if (event.age >= start) {
-        visibleNodes.push(event.schedule.points[index]);
-      }
+    event.schedule.nodes.forEach(({ start, depth }, index) => {
+      const localAge = event.age - start;
+      const pulse = event.nodePulses[index];
+      const active = localAge >= 0 && localAge <= nodeLifetime;
+      const rise = THREE.MathUtils.clamp(localAge / attack, 0, 1);
+      const fall = THREE.MathUtils.clamp(1 - (localAge - attack) / (nodeLifetime - attack), 0, 1);
+      const envelope = active ? Math.min(rise, fall) : 0;
+      const depthDamping = 1 - Math.min(depth, 5) * 0.055;
+
+      pulse.material.opacity = envelope * 0.82 * depthDamping;
+      pulse.scale.setScalar(0.014 + envelope * (0.044 - depth * 0.003));
     });
 
     event.schedule.edges.forEach(({ from, to, start }) => {
-      const progress = THREE.MathUtils.clamp((event.age - start) / 0.13, 0, 1);
-      if (progress <= 0) return;
+      const localAge = event.age - start;
+      if (localAge <= 0 || localAge >= travelTime + tailDelay) return;
 
       const fromPoint = event.schedule.points[from];
       const toPoint = event.schedule.points[to];
-      visibleLines.push(fromPoint, fromPoint.clone().lerp(toPoint, progress));
+      const head = THREE.MathUtils.clamp(localAge / travelTime, 0, 1);
+      const tail = THREE.MathUtils.clamp((localAge - tailDelay) / travelTime, 0, 1);
+      visibleLines.push(
+        fromPoint.clone().lerp(toPoint, tail),
+        fromPoint.clone().lerp(toPoint, head)
+      );
     });
 
-    event.nodeGeometry.setFromPoints(visibleNodes);
     event.lineGeometry.setFromPoints(visibleLines);
-    event.nodeMaterial.opacity = 0.25 + fade * 0.72;
-    event.lineMaterial.opacity = 0.18 + fade * 0.68;
+    event.lineMaterial.opacity = visibleLines.length ? 0.76 : 0;
 
     if (event.age >= event.schedule.duration) {
-      event.nodeCloud.parent.remove(event.nodeCloud);
+      event.nodePulses.forEach(pulse => {
+        pulse.parent.remove(pulse);
+        pulse.material.dispose();
+      });
       event.line.parent.remove(event.line);
       event.nodeGeometry.dispose();
-      event.nodeMaterial.dispose();
       event.line.geometry.dispose();
       event.lineMaterial.dispose();
       firingEvents.splice(i, 1);
@@ -353,7 +369,7 @@ function createPropagationSchedule(originIndex, adjacency) {
   const maxEdges = 96;
   const visited = new Set([originIndex]);
   const queue = [{ index: originIndex, depth: 0 }];
-  const nodes = [{ index: originIndex, start: 0 }];
+  const nodes = [{ index: originIndex, start: 0, depth: 0 }];
   const edges = [];
 
   while (queue.length && edges.length < maxEdges) {
@@ -367,11 +383,11 @@ function createPropagationSchedule(originIndex, adjacency) {
       .forEach((neighbor, order) => {
         if (visited.has(neighbor.index) || edges.length >= maxEdges) return;
 
-        const start = current.depth * 0.14 + order * 0.024;
-        const nextStart = start + 0.13;
+        const start = current.depth * 0.18 + order * 0.032;
+        const nextStart = start + 0.16;
         visited.add(neighbor.index);
         edges.push({ from: current.index, to: neighbor.index, start });
-        nodes.push({ index: neighbor.index, start: nextStart });
+        nodes.push({ index: neighbor.index, start: nextStart, depth: current.depth + 1 });
         queue.push({ index: neighbor.index, depth: current.depth + 1 });
       });
   }
@@ -380,7 +396,7 @@ function createPropagationSchedule(originIndex, adjacency) {
     points: null,
     nodes,
     edges,
-    duration: Math.max(...edges.map(edge => edge.start), 0) + 0.78
+    duration: Math.max(...nodes.map(node => node.start), 0) + 0.52
   };
 }
 
