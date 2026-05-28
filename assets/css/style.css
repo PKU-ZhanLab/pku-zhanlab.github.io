@@ -2492,14 +2492,14 @@ a:hover {
 
   .hero-shell {
     grid-template-columns: minmax(0, 0.9fr) minmax(340px, 430px);
-    max-width: 1500px;
-    padding-left: clamp(42px, 5vw, 76px);
-    padding-right: clamp(42px, 5vw, 76px);
+    max-width: 1600px;
+    padding-left: clamp(36px, 3.5vw, 56px);
+    padding-right: clamp(36px, 3.5vw, 56px);
   }
 
   .section-band,
   .home-cta {
-    max-width: 1460px;
+    max-width: 1580px;
   }
 
   .lab-intro,
@@ -2511,9 +2511,9 @@ a:hover {
 
   .subpage-hero {
     grid-template-columns: minmax(0, 1fr) minmax(300px, 430px);
-    max-width: 1500px;
-    padding-left: clamp(42px, 5vw, 76px);
-    padding-right: clamp(42px, 5vw, 76px);
+    max-width: 1600px;
+    padding-left: clamp(36px, 3.5vw, 56px);
+    padding-right: clamp(36px, 3.5vw, 56px);
   }
 
   .subpage-hero h1 {
@@ -2522,13 +2522,13 @@ a:hover {
 
   .people-page #section-people .container,
   .publications-page main > .container {
-    max-width: 1480px;
-    padding-left: clamp(42px, 5vw, 76px);
-    padding-right: clamp(42px, 5vw, 76px);
+    max-width: 1600px;
+    padding-left: clamp(36px, 3.5vw, 56px);
+    padding-right: clamp(36px, 3.5vw, 56px);
   }
 
   .people-page .people-widget {
-    max-width: 1360px;
+    max-width: 1480px;
     gap: 0 clamp(56px, 6vw, 96px);
   }
 
