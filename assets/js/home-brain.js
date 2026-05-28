@@ -65,7 +65,12 @@ if (canvas) {
   });
   root.add(new THREE.Points(hubGeometry, hubMaterial));
 
-  const connectionGeometry = new THREE.BufferGeometry().setFromPoints(createConnections(brainPoints));
+  const connectionPairs = createConnections(brainPoints);
+  const adjacency = createAdjacency(brainPoints.length, connectionPairs, brainPoints);
+  const connectionGeometry = new THREE.BufferGeometry().setFromPoints(connectionPairs.flatMap(([from, to]) => [
+    brainPoints[from],
+    brainPoints[to]
+  ]));
   const connectionMaterial = new THREE.LineBasicMaterial({
     color: 0x147486,
     transparent: true,
@@ -188,13 +193,13 @@ if (canvas) {
     const [hit] = raycaster.intersectObject(brainPointCloud);
     if (!hit || hit.index === undefined) {
       const nearest = findNearestProjectedPoint(event, rect, brainPoints, root, camera);
-      if (nearest) {
-        createFiringEvent(nearest, brainPoints, root, firingEvents);
+      if (nearest !== null) {
+        createFiringEvent(nearest, brainPoints, adjacency, root, firingEvents);
       }
       return;
     }
 
-    createFiringEvent(brainPoints[hit.index], brainPoints, root, firingEvents);
+    createFiringEvent(hit.index, brainPoints, adjacency, root, firingEvents);
   }
 }
 
@@ -203,7 +208,7 @@ function findNearestProjectedPoint(event, rect, points, root, camera) {
   let nearest = null;
   let nearestDistance = 56;
 
-  points.forEach(point => {
+  points.forEach((point, index) => {
     projected.copy(point).applyMatrix4(root.matrixWorld).project(camera);
     if (projected.z < -1 || projected.z > 1) return;
 
@@ -213,7 +218,7 @@ function findNearestProjectedPoint(event, rect, points, root, camera) {
 
     if (distance < nearestDistance) {
       nearestDistance = distance;
-      nearest = point;
+      nearest = index;
     }
   });
 
@@ -261,45 +266,44 @@ function setupHomeInteractions() {
   setupSectionRail();
 }
 
-function createFiringEvent(origin, points, root, firingEvents) {
-  const ringMaterial = new THREE.MeshBasicMaterial({
+function createFiringEvent(originIndex, points, adjacency, root, firingEvents) {
+  const connectedOrigin = adjacency[originIndex]?.length ? originIndex : findClosestConnectedIndex(originIndex, points, adjacency);
+  if (connectedOrigin === null) return;
+
+  const schedule = createPropagationSchedule(connectedOrigin, adjacency);
+  if (!schedule.edges.length) return;
+  schedule.points = points;
+
+  const nodeGeometry = new THREE.BufferGeometry();
+  const nodeMaterial = new THREE.PointsMaterial({
     color: 0xba232a,
     transparent: true,
-    opacity: 0.85,
-    wireframe: true,
+    opacity: 0.92,
+    size: 0.095,
+    sizeAttenuation: true,
     depthWrite: false
   });
-  const ring = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 12), ringMaterial);
-  ring.position.copy(origin);
-  ring.scale.setScalar(0.04);
-  root.add(ring);
+  const nodeCloud = new THREE.Points(nodeGeometry, nodeMaterial);
+  root.add(nodeCloud);
 
-  const nearby = points
-    .filter(point => point !== origin)
-    .map(point => ({ point, distance: point.distanceTo(origin) }))
-    .filter(item => item.distance < 0.82)
-    .sort((a, b) => a.distance - b.distance)
-    .slice(0, 22);
-
-  const linePoints = [];
-  nearby.forEach(({ point }) => {
-    linePoints.push(origin, point);
-  });
-
+  const lineGeometry = new THREE.BufferGeometry();
   const lineMaterial = new THREE.LineBasicMaterial({
     color: 0xba232a,
     transparent: true,
-    opacity: 0.68,
+    opacity: 0.82,
     depthWrite: false
   });
-  const line = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePoints), lineMaterial);
+  const line = new THREE.LineSegments(lineGeometry, lineMaterial);
   root.add(line);
 
   firingEvents.push({
     age: 0,
-    ring,
-    ringMaterial,
+    schedule,
+    nodeCloud,
+    nodeGeometry,
+    nodeMaterial,
     line,
+    lineGeometry,
     lineMaterial
   });
 }
@@ -307,23 +311,94 @@ function createFiringEvent(origin, points, root, firingEvents) {
 function updateFiringEvents(firingEvents) {
   for (let i = firingEvents.length - 1; i >= 0; i -= 1) {
     const event = firingEvents[i];
-    event.age += 0.026;
-    const opacity = Math.max(0, 1 - event.age);
+    event.age += 0.018;
+    const fade = THREE.MathUtils.clamp((event.schedule.duration - event.age) / 0.42, 0, 1);
+    const visibleNodes = [];
+    const visibleLines = [];
 
-    event.ring.scale.setScalar(0.05 + event.age * 1.25);
-    event.ringMaterial.opacity = opacity * 0.72;
-    event.lineMaterial.opacity = opacity * 0.58;
+    event.schedule.nodes.forEach(({ index, start }) => {
+      if (event.age >= start) {
+        visibleNodes.push(event.schedule.points[index]);
+      }
+    });
 
-    if (event.age >= 1) {
-      event.ring.parent.remove(event.ring);
+    event.schedule.edges.forEach(({ from, to, start }) => {
+      const progress = THREE.MathUtils.clamp((event.age - start) / 0.13, 0, 1);
+      if (progress <= 0) return;
+
+      const fromPoint = event.schedule.points[from];
+      const toPoint = event.schedule.points[to];
+      visibleLines.push(fromPoint, fromPoint.clone().lerp(toPoint, progress));
+    });
+
+    event.nodeGeometry.setFromPoints(visibleNodes);
+    event.lineGeometry.setFromPoints(visibleLines);
+    event.nodeMaterial.opacity = 0.25 + fade * 0.72;
+    event.lineMaterial.opacity = 0.18 + fade * 0.68;
+
+    if (event.age >= event.schedule.duration) {
+      event.nodeCloud.parent.remove(event.nodeCloud);
       event.line.parent.remove(event.line);
-      event.ring.geometry.dispose();
-      event.ringMaterial.dispose();
+      event.nodeGeometry.dispose();
+      event.nodeMaterial.dispose();
       event.line.geometry.dispose();
       event.lineMaterial.dispose();
       firingEvents.splice(i, 1);
     }
   }
+}
+
+function createPropagationSchedule(originIndex, adjacency) {
+  const maxDepth = 5;
+  const maxEdges = 96;
+  const visited = new Set([originIndex]);
+  const queue = [{ index: originIndex, depth: 0 }];
+  const nodes = [{ index: originIndex, start: 0 }];
+  const edges = [];
+
+  while (queue.length && edges.length < maxEdges) {
+    const current = queue.shift();
+    if (current.depth >= maxDepth) continue;
+
+    adjacency[current.index]
+      .slice()
+      .sort((a, b) => a.distance - b.distance)
+      .slice(0, 4)
+      .forEach((neighbor, order) => {
+        if (visited.has(neighbor.index) || edges.length >= maxEdges) return;
+
+        const start = current.depth * 0.14 + order * 0.024;
+        const nextStart = start + 0.13;
+        visited.add(neighbor.index);
+        edges.push({ from: current.index, to: neighbor.index, start });
+        nodes.push({ index: neighbor.index, start: nextStart });
+        queue.push({ index: neighbor.index, depth: current.depth + 1 });
+      });
+  }
+
+  return {
+    points: null,
+    nodes,
+    edges,
+    duration: Math.max(...edges.map(edge => edge.start), 0) + 0.78
+  };
+}
+
+function findClosestConnectedIndex(originIndex, points, adjacency) {
+  let nearest = null;
+  let nearestDistance = Infinity;
+
+  points.forEach((point, index) => {
+    if (!adjacency[index]?.length) return;
+
+    const distance = point.distanceTo(points[originIndex]);
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearest = index;
+    }
+  });
+
+  return nearest;
 }
 
 function setupLensControls() {
@@ -419,7 +494,7 @@ function createBrainPoints(count) {
 }
 
 function createConnections(points) {
-  const lines = [];
+  const pairs = [];
   const maxDistance = 0.52;
 
   for (let i = 0; i < points.length; i += 1) {
@@ -430,13 +505,25 @@ function createConnections(points) {
       const sameHemisphere = Math.sign(points[i].x) === Math.sign(points[j].x);
 
       if (sameHemisphere && distance < maxDistance && Math.random() > 0.54) {
-        lines.push(points[i], points[j]);
+        pairs.push([i, j]);
         linked += 1;
       }
     }
   }
 
-  return lines;
+  return pairs;
+}
+
+function createAdjacency(count, pairs, points) {
+  const adjacency = Array.from({ length: count }, () => []);
+
+  pairs.forEach(([from, to]) => {
+    const distance = points[from].distanceTo(points[to]);
+    adjacency[from].push({ index: to, distance });
+    adjacency[to].push({ index: from, distance });
+  });
+
+  return adjacency;
 }
 
 function createParticleField(count) {
