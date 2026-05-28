@@ -20,8 +20,18 @@ if (canvas) {
   root.position.set(1.55, 0, 0);
   scene.add(root);
 
-  const pointer = new THREE.Vector2(0, 0);
   const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const raycaster = new THREE.Raycaster();
+  raycaster.params.Points.threshold = 0.1;
+  const pointerNdc = new THREE.Vector2();
+  const targetRotation = new THREE.Vector2(0, 0);
+  const dragState = {
+    active: false,
+    moved: false,
+    x: 0,
+    y: 0
+  };
+  const firingEvents = [];
 
   const brainPoints = createBrainPoints(460);
   const pointGeometry = new THREE.BufferGeometry().setFromPoints(brainPoints);
@@ -32,7 +42,8 @@ if (canvas) {
     opacity: 0.88,
     sizeAttenuation: true
   });
-  root.add(new THREE.Points(pointGeometry, pointMaterial));
+  const brainPointCloud = new THREE.Points(pointGeometry, pointMaterial);
+  root.add(brainPointCloud);
 
   const nodeGlowGeometry = new THREE.BufferGeometry().setFromPoints(brainPoints.filter((_, index) => index % 9 === 0));
   const nodeGlowMaterial = new THREE.PointsMaterial({
@@ -100,9 +111,44 @@ if (canvas) {
   }
 
   window.addEventListener("resize", resize);
-  window.addEventListener("pointermove", event => {
-    pointer.x = (event.clientX / window.innerWidth - 0.5) * 2;
-    pointer.y = (event.clientY / window.innerHeight - 0.5) * 2;
+  canvas.addEventListener("pointerdown", event => {
+    dragState.active = true;
+    dragState.moved = false;
+    dragState.x = event.clientX;
+    dragState.y = event.clientY;
+    canvas.classList.add("is-dragging");
+    canvas.setPointerCapture(event.pointerId);
+  });
+
+  canvas.addEventListener("pointermove", event => {
+    if (!dragState.active) return;
+
+    const dx = event.clientX - dragState.x;
+    const dy = event.clientY - dragState.y;
+    if (Math.abs(dx) + Math.abs(dy) > 3) {
+      dragState.moved = true;
+    }
+
+    targetRotation.y += dx * 0.006;
+    targetRotation.x = THREE.MathUtils.clamp(targetRotation.x + dy * 0.004, -0.72, 0.72);
+    dragState.x = event.clientX;
+    dragState.y = event.clientY;
+  });
+
+  canvas.addEventListener("pointerup", event => {
+    canvas.classList.remove("is-dragging");
+    if (canvas.hasPointerCapture(event.pointerId)) {
+      canvas.releasePointerCapture(event.pointerId);
+    }
+    if (dragState.active && !dragState.moved) {
+      triggerFiring(event);
+    }
+    dragState.active = false;
+  });
+
+  canvas.addEventListener("pointercancel", () => {
+    dragState.active = false;
+    canvas.classList.remove("is-dragging");
   });
 
   resize();
@@ -111,14 +157,15 @@ if (canvas) {
   function animate() {
     frame += 0.01;
 
-    const targetY = pointer.x * 0.18;
-    const targetX = pointer.y * 0.08;
-    root.rotation.y += (targetY + Math.sin(frame * 0.65) * 0.05 - root.rotation.y) * 0.035;
-    root.rotation.x += (targetX + Math.cos(frame * 0.48) * 0.025 - root.rotation.x) * 0.035;
+    const idleY = reducedMotion || dragState.active ? 0 : Math.sin(frame * 0.38) * 0.035;
+    const idleX = reducedMotion || dragState.active ? 0 : Math.cos(frame * 0.31) * 0.018;
+    root.rotation.y += (targetRotation.y + idleY - root.rotation.y) * 0.055;
+    root.rotation.x += (targetRotation.x + idleX - root.rotation.x) * 0.055;
     pulseLine.rotation.z = Math.sin(frame * 1.4) * 0.05;
     pulseMaterial.opacity = reducedMotion ? 0.5 : 0.36 + Math.abs(Math.sin(frame * 3.2)) * 0.48;
     const breath = reducedMotion ? 1 : 1 + Math.sin(frame * 0.9) * 0.012;
     root.scale.setScalar((window.innerWidth < 900 ? 0.78 : 1) * breath);
+    updateFiringEvents(firingEvents);
     particles.rotation.y += reducedMotion ? 0 : 0.0009;
     particles.rotation.x += reducedMotion ? 0 : 0.0003;
 
@@ -131,11 +178,50 @@ if (canvas) {
   }
 
   animate();
+
+  function triggerFiring(event) {
+    const rect = canvas.getBoundingClientRect();
+    pointerNdc.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    pointerNdc.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointerNdc, camera);
+
+    const [hit] = raycaster.intersectObject(brainPointCloud);
+    if (!hit || hit.index === undefined) {
+      const nearest = findNearestProjectedPoint(event, rect, brainPoints, root, camera);
+      if (nearest) {
+        createFiringEvent(nearest, brainPoints, root, firingEvents);
+      }
+      return;
+    }
+
+    createFiringEvent(brainPoints[hit.index], brainPoints, root, firingEvents);
+  }
+}
+
+function findNearestProjectedPoint(event, rect, points, root, camera) {
+  const projected = new THREE.Vector3();
+  let nearest = null;
+  let nearestDistance = 56;
+
+  points.forEach(point => {
+    projected.copy(point).applyMatrix4(root.matrixWorld).project(camera);
+    if (projected.z < -1 || projected.z > 1) return;
+
+    const x = ((projected.x + 1) / 2) * rect.width + rect.left;
+    const y = ((1 - projected.y) / 2) * rect.height + rect.top;
+    const distance = Math.hypot(event.clientX - x, event.clientY - y);
+
+    if (distance < nearestDistance) {
+      nearestDistance = distance;
+      nearest = point;
+    }
+  });
+
+  return nearest;
 }
 
 function setupHomeInteractions() {
   document.body.classList.add("motion-ready");
-  const cursorGlow = document.querySelector(".cursor-glow");
 
   const updateScrollState = () => {
     const scrollable = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
@@ -145,13 +231,6 @@ function setupHomeInteractions() {
 
   updateScrollState();
   window.addEventListener("scroll", updateScrollState, { passive: true });
-
-  if (cursorGlow && window.matchMedia("(pointer: fine)").matches) {
-    window.addEventListener("pointermove", event => {
-      document.body.classList.add("has-pointer");
-      cursorGlow.style.transform = `translate3d(${event.clientX}px, ${event.clientY}px, 0) translate(-50%, -50%)`;
-    }, { passive: true });
-  }
 
   const revealTargets = document.querySelectorAll(".section-band, .question-item, .principle-item, .direction-card, .work-card, .home-cta");
   const observer = new IntersectionObserver(entries => {
@@ -178,20 +257,73 @@ function setupHomeInteractions() {
     });
   });
 
-  document.querySelectorAll(".button-primary, .button-secondary").forEach(button => {
-    button.addEventListener("pointermove", event => {
-      const rect = button.getBoundingClientRect();
-      const x = (event.clientX - rect.left - rect.width / 2) * 0.12;
-      const y = (event.clientY - rect.top - rect.height / 2) * 0.18;
-      button.style.transform = `translate(${x}px, ${y}px)`;
-    });
-    button.addEventListener("pointerleave", () => {
-      button.style.transform = "";
-    });
-  });
-
   setupLensControls();
   setupSectionRail();
+}
+
+function createFiringEvent(origin, points, root, firingEvents) {
+  const ringMaterial = new THREE.MeshBasicMaterial({
+    color: 0xba232a,
+    transparent: true,
+    opacity: 0.85,
+    wireframe: true,
+    depthWrite: false
+  });
+  const ring = new THREE.Mesh(new THREE.SphereGeometry(1, 24, 12), ringMaterial);
+  ring.position.copy(origin);
+  ring.scale.setScalar(0.04);
+  root.add(ring);
+
+  const nearby = points
+    .filter(point => point !== origin)
+    .map(point => ({ point, distance: point.distanceTo(origin) }))
+    .filter(item => item.distance < 0.82)
+    .sort((a, b) => a.distance - b.distance)
+    .slice(0, 22);
+
+  const linePoints = [];
+  nearby.forEach(({ point }) => {
+    linePoints.push(origin, point);
+  });
+
+  const lineMaterial = new THREE.LineBasicMaterial({
+    color: 0xba232a,
+    transparent: true,
+    opacity: 0.68,
+    depthWrite: false
+  });
+  const line = new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(linePoints), lineMaterial);
+  root.add(line);
+
+  firingEvents.push({
+    age: 0,
+    ring,
+    ringMaterial,
+    line,
+    lineMaterial
+  });
+}
+
+function updateFiringEvents(firingEvents) {
+  for (let i = firingEvents.length - 1; i >= 0; i -= 1) {
+    const event = firingEvents[i];
+    event.age += 0.026;
+    const opacity = Math.max(0, 1 - event.age);
+
+    event.ring.scale.setScalar(0.05 + event.age * 1.25);
+    event.ringMaterial.opacity = opacity * 0.72;
+    event.lineMaterial.opacity = opacity * 0.58;
+
+    if (event.age >= 1) {
+      event.ring.parent.remove(event.ring);
+      event.line.parent.remove(event.line);
+      event.ring.geometry.dispose();
+      event.ringMaterial.dispose();
+      event.line.geometry.dispose();
+      event.lineMaterial.dispose();
+      firingEvents.splice(i, 1);
+    }
+  }
 }
 
 function setupLensControls() {
